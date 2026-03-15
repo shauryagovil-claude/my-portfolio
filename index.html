@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shaurya Govil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:   #F4EFE6;
+      --cream-2: #EDE6D9;
+      --ink:     #141210;
+      --green:   #1B4332;
+      --green-2: #2D6A4F;
+      --gold:    #B5883E;
+      --muted:   #7A7268;
+      --rule:    rgba(20,18,16,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--green);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--green);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.2s, height 0.2s;
+      opacity: 0.5;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* NOISE TEXTURE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 56px;
+      background: rgba(244, 239, 230, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex; gap: 40px; list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
+      background: var(--green);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 140px 56px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      bottom: -0.1em; left: -0.02em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(160px, 22vw, 300px);
+      font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(27, 67, 50, 0.07);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .hero-content {
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 900px; position: relative; z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero-eyebrow-line {
+      width: 48px; height: 1px; background: var(--green);
+    }
+
+    .hero-eyebrow span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 9vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 40px;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--green);
+    }
+
+    .hero-meta {
+      display: flex; align-items: center; gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-role {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-role strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .hero-scroll {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-scroll-line {
+      width: 32px; height: 1px;
+      background: var(--muted);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleX(1); opacity: 1; }
+      50% { transform: scaleX(1.4); opacity: 0.5; }
+    }
+
+    .hero-quote-block {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--rule);
+      padding-top: 24px;
+      display: flex; align-items: baseline; gap: 20px;
+    }
+
+    .hero-quote-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300; color: var(--rule);
+      line-height: 1; flex-shrink: 0;
+    }
+
+    .hero-quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-style: italic;
+      color: var(--muted); line-height: 1.5;
+    }
+
+    /* ─── SECTIONS ─── */
+    section:not(#hero) {
+      padding: 100px 56px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+      align-items: start;
+    }
+
+    .section-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.5rem; font-weight: 300;
+      color: var(--rule); line-height: 1;
+    }
+
+    .section-title-group { border-top: 1px solid var(--rule); padding-top: 16px; }
+
+    .section-label-small {
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400; letter-spacing: -0.02em;
+      color: var(--ink); line-height: 1.1;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px 64px;
+    }
+
+    .about-text {
+      grid-column: 1 / -1;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300;
+      line-height: 1.75; color: var(--ink);
+    }
+
+    .about-text strong {
+      font-weight: 600; color: var(--green);
+    }
+
+    .stat-block {
+      padding: 28px 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2rem; font-weight: 300;
+      color: var(--green); line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    .tag-row {
+      grid-column: 1 / -1;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding-top: 8px;
+    }
+
+    .tag {
+      padding: 7px 16px;
+      border: 1px solid rgba(27, 67, 50, 0.25);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tag:hover {
+      background: var(--green);
+      color: var(--cream);
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .exp-list { display: flex; flex-direction: column; }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      padding: 40px 0;
+      border-top: 1px solid var(--rule);
+      transition: background 0.2s;
+      position: relative;
+    }
+
+    .exp-item::before {
+      content: '';
+      position: absolute; left: -56px; top: 0; bottom: 0; width: 3px;
+      background: var(--green);
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 0.4s ease;
+    }
+
+    .exp-item:hover::before { transform: scaleY(1); }
+
+    .exp-left { padding-top: 4px; }
+
+    .exp-date {
+      font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .exp-co-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background: var(--green);
+      color: var(--cream);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .exp-right {}
+
+    .exp-role {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 400;
+      color: var(--ink); margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .exp-company {
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      color: var(--green); font-weight: 500;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+
+    .exp-desc {
+      font-size: 0.92rem; line-height: 1.8;
+      color: var(--muted); max-width: 560px;
+    }
+
+    .exp-pill {
+      display: inline-block; margin-top: 16px;
+      padding: 5px 12px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact { padding-bottom: 120px; }
+
+    .contact-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 300;
+      color: var(--muted); line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 56px;
+      grid-column: 1 / -1;
+    }
+
+    .contact-links {
+      display: flex; flex-direction: column;
+      border-top: 1px solid var(--rule);
+    }
+
+    .contact-link {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+      color: var(--ink);
+      transition: padding-left 0.3s ease;
+      group: true;
+    }
+
+    .contact-link:hover {
+      padding-left: 16px;
+    }
+
+    .contact-link:hover .contact-link-label { color: var(--green); }
+    .contact-link:hover .contact-arrow { transform: translate(4px, -4px); }
+
+    .contact-link-left {
+      display: flex; align-items: center; gap: 24px;
+    }
+
+    .contact-link-tag {
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+      width: 80px;
+    }
+
+    .contact-link-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .contact-arrow {
+      font-size: 1.2rem; color: var(--muted);
+      transition: transform 0.25s ease, color 0.2s;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 32px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer-left {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 300; color: var(--muted);
+    }
+
+    .footer-right {
+      font-size: 0.72rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 18px 24px; }
+      #hero { padding: 120px 24px 48px; }
+      section:not(#hero) { padding: 72px 24px; }
+      .section-header { grid-template-columns: 1fr; gap: 24px; }
+      .section-num { display: none; }
+      .about-body { grid-template-columns: 1fr; }
+      .about-text { font-size: 1.25rem; }
+      .exp-item { grid-template-columns: 1fr; gap: 16px; }
+      .exp-item::before { left: -24px; }
+      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">Shaurya Govil</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Associate at BCG &nbsp;·&nbsp; IIT</span>
+      </div>
+
+      <h1>Shaurya<br /><em>Govil</em></h1>
+
+      <div class="hero-meta">
+        <p class="hero-role"><strong>Consultant</strong> &nbsp;·&nbsp; Problem Solver &nbsp;·&nbsp; First-time Web Builder</p>
+      </div>
+      <div class="hero-scroll" style="margin-top: 40px;">
+        <div class="hero-scroll-line"></div>
+        Scroll to explore
+      </div>
+    </div>
+
+    <div class="hero-quote-block">
+      <span class="hero-quote-num">"</span>
+      <p class="hero-quote-text">It's a little scary — but I know I'll get through it.</p>
+    </div>
+
+    <div class="hero-bg-text" aria-hidden="true">SG</div>
+  </section>
+
+  <!-- ═══ ABOUT ═══ -->
+  <section id="about">
+    <div class="section-header reveal">
+      <div class="section-num">01</div>
+      <div class="section-title-group">
+        <p class="section-label-small">Who I am</p>
+        <h2>About Me</h2>
+      </div>
+    </div>
+
+    <div class="about-body">
+      <p class="about-text reveal">
+        Hi — I'm <strong>Shaurya Govil</strong>, a student at the
+        <strong>Indian Institute of Technology (IIT)</strong>, shaped by a belief that
+        rigorous thinking and genuine curiosity can solve almost anything.
+        I'm passionate about consulting, strategy, and building things that matter —
+        including, apparently, my <strong>first webpage</strong>.
+      </p>
+
+      <div class="stat-block reveal">
+        <div class="stat-num">BCG</div>
+        <div class="stat-label">Associate · Pre-Placement Offer</div>
+      </div>
+
+      <div class="stat-block reveal">
+        <div class="stat-num">IIT</div>
+        <div class="stat-label">Teaching Assistant · Alma Mater</div>
+      </div>
+
+      <div class="tag-row reveal">
+        <span class="tag">Strategy</span>
+        <span class="tag">Consulting</span>
+        <span class="tag">Problem Solving</span>
+        <span class="tag">Teaching</span>
+        <span class="tag">Leadership</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EXPERIENCE ═══ -->
+  <section id="experience">
+    <div class="section-header reveal">
+      <div class="section-num">02</div>
+      <div class="section-title-group">
+        <p class="section-label-small">Where I've been</p>
+        <h2>Experience</h2>
+      </div>
+    </div>
+
+    <div class="exp-list">
+
+      <div class="exp-item reveal">
+        <div class="exp-left">
+          <div class="exp-date">2024 – Present</div>
+          <div class="exp-co-badge">BCG</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">Associate</div>
+          <div class="exp-company">Boston Consulting Group</div>
+          <p class="exp-desc">
+            Joining as an Associate following a Pre-Placement Offer — working
+            at the intersection of business strategy and complex problem-solving
+            in one of the world's leading management consulting firms.
+          </p>
+          <span class="exp-pill">Pre-Placement Offer</span>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-left">
+          <div class="exp-date">Summer 2024</div>
+          <div class="exp-co-badge">BCG</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">Summer Intern</div>
+          <div class="exp-company">Boston Consulting Group</div>
+          <p class="exp-desc">
+            First exposure to the corporate world in a fast-paced, dynamic consulting
+            environment. Worked with cross-functional teams, tackled ambiguous business
+            problems, and delivered client-facing insights with full ownership and
+            accountability.
+          </p>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-left">
+          <div class="exp-date">IIT</div>
+          <div class="exp-co-badge">IIT</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">Teaching Assistant</div>
+          <div class="exp-company">Indian Institute of Technology</div>
+          <p class="exp-desc">
+            Supported faculty in delivering coursework and mentored students through
+            complex topics — contributing to a stronger, more engaged learning
+            environment on campus.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact">
+    <div class="section-header reveal">
+      <div class="section-num">03</div>
+      <div class="section-title-group">
+        <p class="section-label-small">Get in touch</p>
+        <h2>Contact</h2>
+      </div>
+    </div>
+
+    <p class="contact-intro reveal">
+      Whether it's a conversation about strategy, consulting, or just saying hello —
+      my inbox is always open.
+    </p>
+
+    <div class="contact-links reveal">
+
+      <a class="contact-link" href="mailto:shauryagovil@gmail.com">
+        <div class="contact-link-left">
+          <span class="contact-link-tag">Email</span>
+          <span class="contact-link-label">shauryagovil@gmail.com</span>
+        </div>
+        <span class="contact-arrow">↗</span>
+      </a>
+
+      <a class="contact-link" href="https://in.linkedin.com/in/shaurya-govil-723745222" target="_blank">
+        <div class="contact-link-left">
+          <span class="contact-link-tag">LinkedIn</span>
+          <span class="contact-link-label">Shaurya Govil</span>
+        </div>
+        <span class="contact-arrow">↗</span>
+      </a>
+
+      <a class="contact-link" href="#">
+        <div class="contact-link-left">
+          <span class="contact-link-tag">Institution</span>
+          <span class="contact-link-label">Indian Institute of Technology</span>
+        </div>
+        <span class="contact-arrow">↗</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-left">Shaurya Govil &nbsp;&mdash;&nbsp; Associate, BCG</span>
+    <span class="footer-right">Built with Claude &nbsp;·&nbsp; 2026</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '16px';
+        cursor.style.height = '16px';
+        ring.style.width = '52px';
+        ring.style.height = '52px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
