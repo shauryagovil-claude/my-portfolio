@@ -76,6 +76,50 @@
     }
     body:hover .cursor { opacity: 1; }
 
+    /* DOT GRID — consulting/strategy feel */
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(27,67,50,0.18) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      mask-image: linear-gradient(to bottom right, transparent 40%, rgba(0,0,0,0.5) 100%);
+      -webkit-mask-image: linear-gradient(to bottom right, transparent 40%, rgba(0,0,0,0.5) 100%);
+    }
+
+    /* MARQUEE STRIP */
+    .marquee-strip {
+      overflow: hidden;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 14px 0;
+      background: var(--cream-2);
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+    }
+
+    .marquee-track span {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 28px;
+    }
+
+    .marquee-track span.accent {
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
     /* NOISE TEXTURE OVERLAY */
     body::before {
       content: '';
@@ -180,18 +224,31 @@
 
     h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(4rem, 9vw, 8rem);
+      font-size: clamp(5rem, 16vw, 15rem);
       font-weight: 300;
-      line-height: 0.95;
-      letter-spacing: -0.02em;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
       color: var(--ink);
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
 
     h1 em {
       font-style: italic;
       font-weight: 300;
       color: var(--green);
+      display: block;
+    }
+
+    /* Letter reveal animation */
+    .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.15em);
+      animation: letterIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes letterIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero-meta {
@@ -538,7 +595,10 @@
         <span>Associate at BCG &nbsp;·&nbsp; IIT</span>
       </div>
 
-      <h1>Shaurya<br /><em>Govil</em></h1>
+      <h1 id="heroName" aria-label="Shaurya Govil">
+        <span class="name-line" id="line1"></span>
+        <em id="line2"></em>
+      </h1>
 
       <div class="hero-meta">
         <p class="hero-role"><strong>Consultant</strong> &nbsp;·&nbsp; Problem Solver &nbsp;·&nbsp; First-time Web Builder</p>
@@ -556,6 +616,28 @@
 
     <div class="hero-bg-text" aria-hidden="true">SG</div>
   </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="accent">BCG Associate</span><span>·</span>
+      <span>Indian Institute of Technology</span><span>·</span>
+      <span class="accent">Strategy</span><span>·</span>
+      <span>Management Consulting</span><span>·</span>
+      <span class="accent">Problem Solving</span><span>·</span>
+      <span>Teaching Assistant</span><span>·</span>
+      <span class="accent">Pre-Placement Offer</span><span>·</span>
+      <span>Leadership</span><span>·</span>
+      <span class="accent">BCG Associate</span><span>·</span>
+      <span>Indian Institute of Technology</span><span>·</span>
+      <span class="accent">Strategy</span><span>·</span>
+      <span>Management Consulting</span><span>·</span>
+      <span class="accent">Problem Solving</span><span>·</span>
+      <span>Teaching Assistant</span><span>·</span>
+      <span class="accent">Pre-Placement Offer</span><span>·</span>
+      <span>Leadership</span><span>·</span>
+    </div>
+  </div>
 
   <!-- ═══ ABOUT ═══ -->
   <section id="about">
@@ -745,6 +827,20 @@
         ring.style.height = '36px';
       });
     });
+
+    // Hero name letter animation
+    function animateName(id, word, baseDelay) {
+      const el = document.getElementById(id);
+      word.split('').forEach((ch, i) => {
+        const s = document.createElement('span');
+        s.className = 'letter';
+        s.textContent = ch === ' ' ? '\u00A0' : ch;
+        s.style.animationDelay = (baseDelay + i * 0.055) + 's';
+        el.appendChild(s);
+      });
+    }
+    animateName('line1', 'Shaurya', 0.1);
+    animateName('line2', 'Govil', 0.55);
 
     // Scroll reveal
     const observer = new IntersectionObserver(entries => {
